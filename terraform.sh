@@ -5,12 +5,16 @@
 # Thanks!
 # - Paul(rbr)
 #
+#!/bin/bash -e
 
-declare "TF_VAR_${provider}_access_key"="$(pass ${provider}/access_key)"
-declare "TF_VAR_${provider}_token"="$(pass ${provider}/token)"
+if (which pass >/dev/null 2>&1); then
+   provider_key="$(pass ${provider}/access_key)"
+   provider_token="$(pass ${provider}/token)"
+   declare "TF_VAR_${provider}_access_key"=$provider_key
+   declare "TF_VAR_${provider}_token"=$provider_token
+fi
+
 export TF_VAR_${provider}_access_key
 export TF_VAR_${provider}_token
 
-cd ${wd}
-
-terraform $@
+cd ${wd} && terraform $@
