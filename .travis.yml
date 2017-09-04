@@ -1,10 +1,10 @@
 ---
 # Use the new container infrastructure
-sudo: false
+sudo: required
 
 install:
   # Install terraform
-  - make install
+  - sudo make install
   # Check ansible version
   - terraform --version
 
