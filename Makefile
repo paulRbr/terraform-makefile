@@ -35,16 +35,24 @@ ifneq ("$(provider)", "")
 else
   wd     ?= "."
 endif
+ifeq ("$(shell which terraform)", "")
+  install ?= "true"
+endif
+ifeq ("$(upgrade)", "true")
+  install ?= "true"
+endif
 
 ##
 # TASKS
 ##
 .PHONY: install
 install: ## make install # Install terraform and dependencies
+ifeq ($(install),"true")
 	@wget -O /usr/bin/terraform.zip https://releases.hashicorp.com/terraform/0.10.3/terraform_$(version)_$(os)_$(arch).zip
 	@unzip -d /usr/bin /usr/bin/terraform.zip && rm /usr/bin/terraform.zip
+endif
 	@terraform --version
-	@wd=$(wd) terraform.sh init
+	@wd=$(wd) ./terraform.sh init
 
 .PHONY: lint
 lint: ## make lint # Rewrites config to canonical format
