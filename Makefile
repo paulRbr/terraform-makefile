@@ -58,6 +58,10 @@ endif
 lint: ## make lint # Rewrites config to canonical format
 	@terraform fmt $(opts)
 
+.PHONY: validate
+validate: ## make validate # Basic syntax check
+	@wd=$(wd) ./terraform.sh validate $(opts)
+
 .PHONY: list
 list: ## make list # List infra resources
 	@wd=$(wd) terraform.sh show $(opts)
