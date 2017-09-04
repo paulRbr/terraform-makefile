@@ -1,0 +1,13 @@
+---
+# Use the new container infrastructure
+sudo: false
+
+install:
+  # Install terraform
+  - make install
+  # Check ansible version
+  - terraform --version
+
+script:
+  # Basic run
+  - make
