@@ -64,19 +64,19 @@ validate: ## make validate # Basic syntax check
 
 .PHONY: list
 list: ## make list # List infra resources
-	@wd=$(wd) terraform.sh show $(opts)
+	@wd=$(wd) ./terraform.sh show $(opts)
 
 .PHONY: dry-run
 dry-run: ## make dry-run # Dry run resources changes
-	@wd=$(wd) terraform.sh plan $(opts)
+	@wd=$(wd) ./terraform.sh plan $(opts)
 
 .PHONY: run
 run: ## make run # Execute resources changes
-	@wd=$(wd) terraform.sh apply $(opts)
+	@wd=$(wd) ./terraform.sh apply $(opts)
 
 .PHONY: destroy
 destroy: ## make destroy # Destroy resources
-	@wd=$(wd) terraform.sh destroy $(opts)
+	@wd=$(wd) ./terraform.sh destroy $(opts)
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
