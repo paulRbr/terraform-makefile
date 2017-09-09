@@ -1,9 +1,12 @@
-# This MAKEFILE is maintained open-source on Github.com
-# If you make any modification to this file please open a Pull Request
-# with your changes on https://github.com/paulRbr/terraform-makefile
+# ------------------
+# TERRAFORM-MAKEFILE
+# v0.1.0
+# ------------------
 #
-# Thanks!
-# - Paul(rbr)
+# This Makefile is maintained on Github.com.
+# Please contribute upstream any changes by opening pull requests:
+# https://github.com/paulRbr/terraform-makefile/pull/new/master
+# Thanks! - Paul(rbr)
 
 ##
 # TERRAFORM INSTALL
