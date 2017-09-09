@@ -1,9 +1,12 @@
-# This MAKEFILE is maintained open-source on Github.com
-# If you make any modification to this file please open a Pull Request
-# with your changes on https://github.com/paulRbr/terraform-makefile
+# ------------------
+# TERRAFORM-MAKEFILE
+# v0.1.0
+# ------------------
 #
-# Thanks!
-# - Paul(rbr)
+# This Makefile is maintained on Github.com.
+# Please contribute upstream any changes by opening pull requests:
+# https://github.com/paulRbr/terraform-makefile/pull/new/master
+# Thanks! - Paul(rbr)
 
 ##
 # TERRAFORM INSTALL
@@ -56,7 +59,7 @@ endif
 
 .PHONY: lint
 lint: ## make lint # Rewrites config to canonical format
-	@terraform fmt $(opts)
+	@terraform fmt -diff=true $(opts)
 
 .PHONY: validate
 validate: ## make validate # Basic syntax check
@@ -64,19 +67,19 @@ validate: ## make validate # Basic syntax check
 
 .PHONY: list
 list: ## make list # List infra resources
-	@wd=$(wd) terraform.sh show $(opts)
+	@wd=$(wd) ./terraform.sh show $(opts)
 
 .PHONY: dry-run
 dry-run: ## make dry-run # Dry run resources changes
-	@wd=$(wd) terraform.sh plan $(opts)
+	@wd=$(wd) ./terraform.sh plan $(opts)
 
 .PHONY: run
 run: ## make run # Execute resources changes
-	@wd=$(wd) terraform.sh apply $(opts)
+	@wd=$(wd) ./terraform.sh apply $(opts)
 
 .PHONY: destroy
 destroy: ## make destroy # Destroy resources
-	@wd=$(wd) terraform.sh destroy $(opts)
+	@wd=$(wd) ./terraform.sh destroy $(opts)
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
