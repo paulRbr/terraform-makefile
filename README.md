@@ -50,12 +50,14 @@ List of commands made available
 
 ~~~bash
 > make
+Terraform-makefile v0.10.4
 destroy                        make destroy # Destroy resources
 dry-run                        make dry-run # Dry run resources changes
 install                        make install # Install terraform and dependencies
 lint                           make lint # Rewrites config to canonical format
 list                           make list # List infra resources
 run                            make run # Execute resources changes
+validate                       make validate # Basic syntax check
 ~~~
 
 ## Variables

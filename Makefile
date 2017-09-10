@@ -1,6 +1,6 @@
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.1.0
+# v0.10.4
 # ------------------
 #
 # This Makefile is maintained on Github.com.
@@ -77,6 +77,7 @@ destroy: ## make destroy # Destroy resources
 	@bash terraform.sh destroy $(opts)
 
 help:
+	@printf "\033[32mTerraform-makefile v$(version)\033[0m\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
