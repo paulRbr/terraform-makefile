@@ -1,6 +1,6 @@
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.1.0
+# v0.10.4
 # ------------------
 #
 # This Makefile is maintained on Github.com.
@@ -11,7 +11,7 @@
 ##
 # TERRAFORM INSTALL
 ##
-version  ?= "0.10.3"
+version  ?= "0.10.4"
 os       ?= $(shell uname|tr A-Z a-z)
 ifeq ($(shell uname -m),x86_64)
   arch   ?= "amd64"
@@ -33,11 +33,6 @@ env      ?= ""
 ##
 # INTERNAL VARIABLES
 ##
-ifneq ("$(provider)", "")
-  wd     ?= providers/$(provider)/$(env)
-else
-  wd     ?= "."
-endif
 ifeq ("$(shell which terraform)", "")
   install ?= "true"
 endif
@@ -51,11 +46,11 @@ endif
 .PHONY: install
 install: ## make install # Install terraform and dependencies
 ifeq ($(install),"true")
-	@wget -O /usr/bin/terraform.zip https://releases.hashicorp.com/terraform/0.10.3/terraform_$(version)_$(os)_$(arch).zip
+	@wget -O /usr/bin/terraform.zip https://releases.hashicorp.com/terraform/$(version)/terraform_$(version)_$(os)_$(arch).zip
 	@unzip -d /usr/bin /usr/bin/terraform.zip && rm /usr/bin/terraform.zip
 endif
 	@terraform --version
-	@wd=$(wd) ./terraform.sh init
+	@bash terraform.sh init
 
 .PHONY: lint
 lint: ## make lint # Rewrites config to canonical format
@@ -63,25 +58,26 @@ lint: ## make lint # Rewrites config to canonical format
 
 .PHONY: validate
 validate: ## make validate # Basic syntax check
-	@wd=$(wd) ./terraform.sh validate $(opts)
+	@bash terraform.sh validate $(opts)
 
 .PHONY: list
 list: ## make list # List infra resources
-	@wd=$(wd) ./terraform.sh show $(opts)
+	@bash terraform.sh show $(opts)
 
 .PHONY: dry-run
-dry-run: ## make dry-run # Dry run resources changes
-	@wd=$(wd) ./terraform.sh plan $(opts)
+dry-run: pass ## make dry-run # Dry run resources changes
+	@bash terraform.sh plan $(opts)
 
 .PHONY: run
 run: ## make run # Execute resources changes
-	@wd=$(wd) ./terraform.sh apply $(opts)
+	@bash terraform.sh apply $(opts)
 
 .PHONY: destroy
 destroy: ## make destroy # Destroy resources
-	@wd=$(wd) ./terraform.sh destroy $(opts)
+	@bash terraform.sh destroy $(opts)
 
 help:
+	@printf "\033[32mTerraform-makefile v$(version)\033[0m\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
