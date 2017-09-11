@@ -12,7 +12,7 @@
 
 valid_identifier()
 {
-    echo "$1" | tr '[:lower:]' '[:upper:]' | tr -cs '[:alpha:]\n' '_'
+    echo "$1" | tr '[:lower:]' '[:upper:]' | tr -cs '[:alpha:][:digit:]\n' '_'
 }
 
 key="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_KEY"
