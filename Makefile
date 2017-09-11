@@ -65,7 +65,7 @@ list: ## make list # List infra resources
 	@bash terraform.sh show $(opts)
 
 .PHONY: dry-run
-dry-run: pass ## make dry-run # Dry run resources changes
+dry-run: ## make dry-run # Dry run resources changes
 	@bash terraform.sh plan $(opts)
 
 .PHONY: run
