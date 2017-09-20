@@ -1,6 +1,6 @@
 # Makefile for Terraform users
 
-[![Build Status](https://travis-ci.org/paulRbr/terraform-makefile.svg?branch=master)](https://travis-ci.org/paulRbr/terraform-makefile) [![Docker Hub](https://img.shields.io/docker/automated/paulRbr/terraform-makefile.svg)](https://hub.docker.com/r/swcc/terraform-makefile/)
+[![Build Status](https://travis-ci.org/paulRbr/terraform-makefile.svg?branch=master)](https://travis-ci.org/paulRbr/terraform-makefile) [![Docker Hub](https://img.shields.io/docker/automated/swcc/terraform-makefile.svg)](https://hub.docker.com/r/swcc/terraform-makefile/)
 
 This repository provides a Makefile to give you a simple interface for [Terraform](https://www.terraform.io/).
 
