@@ -50,7 +50,7 @@ List of commands made available
 
 ~~~bash
 > make
-Terraform-makefile v0.10.4
+Terraform-makefile v0.10.6
 destroy                        make destroy # Destroy resources
 dry-run                        make dry-run # Dry run resources changes
 install                        make install # Install terraform and dependencies
