@@ -54,7 +54,7 @@ endif
 
 .PHONY: lint
 lint: ## make lint # Rewrites config to canonical format
-	@terraform fmt -diff=true $(opts)
+	@terraform fmt -diff=true -check $(opts)
 
 .PHONY: validate
 validate: ## make validate # Basic syntax check
