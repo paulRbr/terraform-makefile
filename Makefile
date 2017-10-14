@@ -1,6 +1,6 @@
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.10.6
+# v0.10.7
 # ------------------
 #
 # This Makefile is maintained on Github.com.
@@ -11,7 +11,7 @@
 ##
 # TERRAFORM INSTALL
 ##
-version  ?= "0.10.6"
+version  ?= "0.10.7"
 os       ?= $(shell uname|tr A-Z a-z)
 ifeq ($(shell uname -m),x86_64)
   arch   ?= "amd64"
