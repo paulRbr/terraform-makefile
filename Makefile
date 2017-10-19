@@ -64,6 +64,18 @@ validate: ## make validate # Basic syntax check
 list: ## make list # List infra resources
 	@bash terraform.sh show $(opts)
 
+.PHONY: refresh
+refresh: ## make refresh # Refresh infra resources
+	@bash terraform.sh refresh $(opts)
+
+.PHONY: console
+console: ## make console # Console infra resources
+	@bash terraform.sh console $(opts)
+
+.PHONY: import
+import: ## make import # Import infra resources
+	bash terraform.sh import $(addr) $(value) $(opts)
+
 .PHONY: dry-run
 dry-run: ## make dry-run # Dry run resources changes
 	@bash terraform.sh plan $(opts)
