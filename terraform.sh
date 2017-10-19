@@ -55,6 +55,14 @@ case $provider in
             declare -x "SCALEWAY_TOKEN=${!secret}"
         fi
         ;;
+    ovh)
+        if [ -z "${OS_PASSWORD}" ]; then
+            declare -x "OS_USERNAME=${!key}"
+            declare -x "OS_PASSWORD=${!secret}"
+        elif [ -z "${OS_AUTH_TOKEN}" ]; then
+            declare -x "OS_AUTH_TOKEN=${!secret}"
+        fi
+        ;;
 esac
 
 cd "providers/${provider}/${env}"
