@@ -9,6 +9,11 @@
 # Thanks! - Paul(rbr)
 
 ##
+# MAKEFILE CONFIG
+##
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+
+##
 # TERRAFORM INSTALL
 ##
 version  ?= "0.10.7"
@@ -50,7 +55,7 @@ ifeq ($(install),"true")
 	@unzip -d /usr/bin /usr/bin/terraform.zip && rm /usr/bin/terraform.zip
 endif
 	@terraform --version
-	@bash terraform.sh init
+	@bash $(dir $(mkfile_path))/terraform.sh init
 
 .PHONY: lint
 lint: ## make lint # Rewrites config to canonical format
@@ -58,35 +63,35 @@ lint: ## make lint # Rewrites config to canonical format
 
 .PHONY: validate
 validate: ## make validate # Basic syntax check
-	@bash terraform.sh validate $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh validate $(opts)
 
 .PHONY: list
 list: ## make list # List infra resources
-	@bash terraform.sh show $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh show $(opts)
 
 .PHONY: refresh
 refresh: ## make refresh # Refresh infra resources
-	@bash terraform.sh refresh $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh refresh $(opts)
 
 .PHONY: console
 console: ## make console # Console infra resources
-	@bash terraform.sh console $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh console $(opts)
 
 .PHONY: import
 import: ## make import # Import infra resources
-	bash terraform.sh import $(addr) $(value) $(opts)
+	bash $(dir $(mkfile_path))/terraform.sh import $(addr) $(value) $(opts)
 
 .PHONY: dry-run
 dry-run: ## make dry-run # Dry run resources changes
-	@bash terraform.sh plan $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh plan $(opts)
 
 .PHONY: run
 run: ## make run # Execute resources changes
-	@bash terraform.sh apply $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh apply $(opts)
 
 .PHONY: destroy
 destroy: ## make destroy # Destroy resources
-	@bash terraform.sh destroy $(opts)
+	@bash $(dir $(mkfile_path))/terraform.sh destroy $(opts)
 
 help:
 	@printf "\033[32mTerraform-makefile v$(version)\033[0m\n"
