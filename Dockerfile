@@ -2,7 +2,7 @@ FROM hashicorp/terraform:0.10.7
 
 RUN \
 apk add --no-cache make bash ;\
-echo -e "#"'!'"/usr/bin/env bash\n\nmake -f /opt/terraform/Makefile $@" > /usr/bin/tf-make ;\
+echo -e "#"'!'"/usr/bin/env bash\n\nmake -f /opt/terraform/Makefile "'$'"@" > /usr/bin/tf-make ;\
 chmod +x /usr/bin/tf-make
 
 WORKDIR /opt/terraform
