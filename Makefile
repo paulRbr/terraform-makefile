@@ -9,11 +9,6 @@
 # Thanks! - Paul(rbr)
 
 ##
-# MAKEFILE CONFIG
-##
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-
-##
 # TERRAFORM INSTALL
 ##
 version  ?= "0.10.7"
@@ -29,18 +24,21 @@ ifeq ($(shell uname -m),aarch64)
 endif
 
 ##
-# MAKEFILE ARGUMENTS
-##
-opts     ?= $(args)
-provider ?= ""
-env      ?= ""
-
-##
 # INTERNAL VARIABLES
 ##
 ifeq ("$(shell which terraform)", "")
   install ?= "true"
 endif
+# Read all subsquent tasks as arguments of the first task
+RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+$(eval $(args) $(RUN_ARGS):;@:)
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+
+##
+# MAKEFILE ARGUMENTS
+##
+provider ?= ""
+env      ?= ""
 ifeq ("$(upgrade)", "true")
   install ?= "true"
 endif
@@ -49,7 +47,7 @@ endif
 # TASKS
 ##
 .PHONY: install
-install: ## make install # Install terraform and dependencies
+install: ## Install terraform and dependencies
 ifeq ($(install),"true")
 	@wget -O /usr/bin/terraform.zip https://releases.hashicorp.com/terraform/$(version)/terraform_$(version)_$(os)_$(arch).zip
 	@unzip -d /usr/bin /usr/bin/terraform.zip && rm /usr/bin/terraform.zip
@@ -58,40 +56,52 @@ endif
 	@bash $(dir $(mkfile_path))/terraform.sh init
 
 .PHONY: lint
-lint: ## make lint # Rewrites config to canonical format
-	@terraform fmt -diff=true -check $(opts)
+lint: ## Rewrites config to canonical format
+	@terraform fmt -diff=true -check $(args) $(RUN_ARGS)
 
 .PHONY: validate
-validate: ## make validate # Basic syntax check
-	@bash $(dir $(mkfile_path))/terraform.sh validate $(opts)
+validate: ## Basic syntax check
+	@bash $(dir $(mkfile_path))/terraform.sh validate $(args) $(RUN_ARGS)
 
-.PHONY: list
-list: ## make list # List infra resources
-	@bash $(dir $(mkfile_path))/terraform.sh show $(opts)
+.PHONY: show
+show: ## List infra resources
+	@bash $(dir $(mkfile_path))/terraform.sh show $(args) $(RUN_ARGS)
 
 .PHONY: refresh
-refresh: ## make refresh # Refresh infra resources
-	@bash $(dir $(mkfile_path))/terraform.sh refresh $(opts)
+refresh: ## Refresh infra resources
+	@bash $(dir $(mkfile_path))/terraform.sh refresh $(args) $(RUN_ARGS)
 
 .PHONY: console
-console: ## make console # Console infra resources
-	@bash $(dir $(mkfile_path))/terraform.sh console $(opts)
+console: ## Console infra resources
+	@bash $(dir $(mkfile_path))/terraform.sh console $(args) $(RUN_ARGS)
 
 .PHONY: import
-import: ## make import # Import infra resources
-	bash $(dir $(mkfile_path))/terraform.sh import $(addr) $(value) $(opts)
+import: ## Import infra resources
+	@bash $(dir $(mkfile_path))/terraform.sh import $(args) $(RUN_ARGS)
+
+.PHONY: taint
+taint: ## Taint infra resources
+	bash $(dir $(mkfile_path))terraform.sh taint -module=$(module) $(args) $(RUN_ARGS)
+
+.PHONY: workspace
+workspace: ## Workspace infra resources
+	bash $(dir $(mkfile_path))terraform.sh workspace $(args) $(RUN_ARGS)
+
+.PHONY: state
+state: ## Inspect or change the remote state of your resources
+	@bash $(dir $(mkfile_path))/terraform.sh state $(args) $(RUN_ARGS)
 
 .PHONY: dry-run
-dry-run: install ## make dry-run # Dry run resources changes
-	@bash $(dir $(mkfile_path))/terraform.sh plan $(opts)
+dry-run: install ## Dry run resources changes
+	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS)
 
 .PHONY: run
-run: ## make run # Execute resources changes
-	@bash $(dir $(mkfile_path))/terraform.sh apply $(opts)
+run: ## Execute resources changes
+	@bash $(dir $(mkfile_path))/terraform.sh apply $(args) $(RUN_ARGS)
 
 .PHONY: destroy
-destroy: ## make destroy # Destroy resources
-	@bash $(dir $(mkfile_path))/terraform.sh destroy $(opts)
+destroy: ## Destroy resources
+	@bash $(dir $(mkfile_path))/terraform.sh destroy $(args) $(RUN_ARGS)
 
 help:
 	@printf "\033[32mTerraform-makefile v$(version)\033[0m\n"
