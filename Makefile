@@ -82,7 +82,7 @@ import: ## make import # Import infra resources
 	bash $(dir $(mkfile_path))/terraform.sh import $(addr) $(value) $(opts)
 
 .PHONY: dry-run
-dry-run: ## make dry-run # Dry run resources changes
+dry-run: install ## make dry-run # Dry run resources changes
 	@bash $(dir $(mkfile_path))/terraform.sh plan $(opts)
 
 .PHONY: run
