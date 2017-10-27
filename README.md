@@ -52,7 +52,7 @@ List of commands made available
 
 ~~~bash
 > make
-Terraform-makefile v0.10.7
+Terraform-makefile v0.10.8
 console                        Console infra resources
 destroy                        Destroy resources
 dry-run                        Dry run resources changes
