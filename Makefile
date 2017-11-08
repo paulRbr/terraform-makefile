@@ -55,6 +55,9 @@ endif
 	@terraform --version
 	@bash $(dir $(mkfile_path))/terraform.sh init
 
+.PHONY: fmt
+fmt:
+	@terraform fmt $(args) $(RUN_ARGS)
 .PHONY: lint
 lint: ## Rewrites config to canonical format
 	@terraform fmt -diff=true -check $(args) $(RUN_ARGS)
@@ -91,10 +94,14 @@ workspace: ## Workspace infra resources
 state: ## Inspect or change the remote state of your resources
 	@bash $(dir $(mkfile_path))/terraform.sh state $(args) $(RUN_ARGS)
 
+.PHONY: plan
+plan: dry-run
 .PHONY: dry-run
 dry-run: install ## Dry run resources changes
 	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS)
 
+.PHONY: apply
+apply: run
 .PHONY: run
 run: ## Execute resources changes
 	@bash $(dir $(mkfile_path))/terraform.sh apply $(args) $(RUN_ARGS)
