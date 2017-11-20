@@ -1,6 +1,6 @@
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.10.8
+# v0.11.0
 # ------------------
 #
 # This Makefile is maintained on Github.com.
