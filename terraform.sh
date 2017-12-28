@@ -18,6 +18,7 @@ valid_identifier()
 
 key="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_KEY"
 secret="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_SECRET"
+token="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_TOKEN"
 
 if (which pass >/dev/null 2>&1); then
     pass_key="$(pass "terraform/${provider}/${env}/access_key")"
