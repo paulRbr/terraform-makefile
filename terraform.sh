@@ -60,7 +60,7 @@ case $provider in
             declare -x "AWS_ACCESS_KEY_ID=${!key}"
             declare -x "AWS_SECRET_ACCESS_KEY=${!secret}"
 
-            if [ -n "${token}" ]; then
+            if [ -n "${!token}" ]; then
                 declare -x "AWS_SESSION_TOKEN=${!token}"
             fi
         fi
