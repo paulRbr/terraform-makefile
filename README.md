@@ -13,6 +13,8 @@ This repository provides a Makefile to give you a simple interface for [Terrafor
 - Unique entrypoint script for credentials management (only for AWS, Azure, DigitalOcean, Google and Scaleway for now)
   - either passing ENV variables. E.g. `<PROVIDER>_<ENV>_SECRET` will be mapped to `DIGITALOCEAN_TOKEN` if `provider=do` is provided as variable
   - either using [`pass`](https://www.passwordstore.org/) as local secret manager. E.g. password `terraform/<provider>/<env>/secret` will be mapped to `DIGITALOCEAN_TOKEN` if `provider=do` is provided as variable
+  - either using [`vault`](https://www.vaultproject.io/) as distributed secret manager (Only for AWS credentials for now). E.g. by using `VAULT_ADDR` and either `VAULT_ROLE_ID` + `VAULT_SECRET_ID` or directly a `VAULT_TOKEN` your credentials will automatically be fetched into your vault.
+
 
 ## Installation
 
