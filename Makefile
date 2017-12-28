@@ -57,6 +57,9 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 ##
 provider ?= ""
 env      ?= ""
+role     ?= ""
+iam      ?= "false"
+ttl      ?= "15m"
 ifeq ("$(upgrade)", "true")
   install ?= "true"
 endif

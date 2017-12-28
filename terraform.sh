@@ -8,7 +8,8 @@
 # https://github.com/paulRbr/terraform-makefile/pull/new/master
 # Thanks! - Paul(rbr)
 #
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 valid_identifier()
 {
@@ -26,11 +27,41 @@ if (which pass >/dev/null 2>&1); then
     declare "${secret}"="${pass_secret}"
 fi
 
+if [ -n "${VAULT_ADDR}" ]; then
+    if [ -z "${VAULT_TOKEN}" ]; then
+        if [ -n "${VAULT_ROLE_ID}" ] && [ -n "${VAULT_SECRET_ID}" ]; then
+            VAULT_TOKEN=$(curl -s -X POST -d "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
+        else
+            echo "VAULT_TOKEN or (VAULT_ROLE_ID and VAULT_SECRET_ID) must be set!"
+            exit
+        fi
+    fi
+
+    case $provider in
+        aws)
+            # We use STS by default but if we need to perform IAM actions we can't use it
+            if [ "${iam}" == "true" ]; then
+                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${ttl}\"}" "${VAULT_ADDR}/v1/aws_${env}/creds/${role}" | jq .data)
+            else
+                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${ttl}\"}" "${VAULT_ADDR}/v1/aws_${env}/sts/${role}" | jq .data)
+                declare "${token}"=$(echo ${creds} | jq -r .security_token)
+            fi
+
+            declare "${key}"=$(echo ${creds} | jq -r .access_key)
+            declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
+            ;;
+    esac
+fi
+
 case $provider in
     aws)
         if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
             declare -x "AWS_ACCESS_KEY_ID=${!key}"
             declare -x "AWS_SECRET_ACCESS_KEY=${!secret}"
+
+            if [ -n "${token}" ]; then
+                declare -x "AWS_SESSION_TOKEN=${!token}"
+            fi
         fi
         ;;
     azurerm)
