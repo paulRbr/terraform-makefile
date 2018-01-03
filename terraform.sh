@@ -11,6 +11,21 @@
 #!/usr/bin/env bash
 set -e
 
+if [ -z "${provider}" ]; then
+    echo "'provider' variable must be set"
+    exit
+fi
+
+if [ -z "${env}" ]; then
+    echo "'env' variable must be set"
+    exit
+fi
+
+vault_path=${vault_path:-""}
+vault_ttl=${vault_ttl:-"15m"}
+vault_aws_role=${vault_aws_role:-"admin"}
+vault_aws_iam=${vault_aws_iam:-"false"}
+
 valid_identifier()
 {
     echo "$1" | tr '[:lower:]' '[:upper:]' | tr -cs '[:alpha:][:digit:]\n' '_'
@@ -32,24 +47,44 @@ if [ -n "${VAULT_ADDR}" ]; then
     if [ -z "${VAULT_TOKEN}" ]; then
         if [ -n "${VAULT_ROLE_ID}" ] && [ -n "${VAULT_SECRET_ID}" ]; then
             VAULT_TOKEN=$(curl -s -X POST -d "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
+            if [ "${VAULT_TOKEN}" == "null" ]; then
+                echo "Error fetching 'VAULT_TOKEN' from 'VAULT_ROLE_ID' and 'VAULT_SECRET_ID'"
+                exit
+            fi
         else
-            echo "VAULT_TOKEN or (VAULT_ROLE_ID and VAULT_SECRET_ID) must be set!"
+            echo "'VAULT_TOKEN' or ( 'VAULT_ROLE_ID' and 'VAULT_SECRET_ID' ) must be set!"
             exit
         fi
     fi
 
     case $provider in
         aws)
+            if [ -z "${vault_path}" ]; then
+              vault_path="aws"
+            fi
+
+            if [ -z "${vault_aws_role}" ]; then
+              echo "'vault_aws_role' variable must be set"
+              exit
+            fi
+
             # We use STS by default but if we need to perform IAM actions we can't use it
-            if [ "${iam}" == "true" ]; then
-                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${ttl}\"}" "${VAULT_ADDR}/v1/aws_${env}/creds/${role}" | jq .data)
+            if [ "${vault_aws_iam}" == "true" ]; then
+                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
             else
-                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${ttl}\"}" "${VAULT_ADDR}/v1/aws_${env}/sts/${role}" | jq .data)
+                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
                 declare "${token}"=$(echo ${creds} | jq -r .security_token)
+            fi
+
+            if [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
+                echo "Unable to fetch AWS credentials from Vault"
+                exit
             fi
 
             declare "${key}"=$(echo ${creds} | jq -r .access_key)
             declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
+
+            echo "Fetched AWS credentials from Vault"
             ;;
     esac
 fi

@@ -55,6 +55,7 @@ List of commands made available
 ~~~bash
 > make
 Terraform-makefile v0.11.1
+
 console                        Console infra resources
 destroy                        Destroy resources
 dry-run                        Dry run resources changes
