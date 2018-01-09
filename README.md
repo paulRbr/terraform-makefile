@@ -15,12 +15,23 @@ This repository provides a Makefile to give you a simple interface for [Terrafor
   - either using [`pass`](https://www.passwordstore.org/) as local secret manager. E.g. password `terraform/<provider>/<env>/secret` will be mapped to `DIGITALOCEAN_TOKEN` if `provider=do` is provided as variable
   - either using [`vault`](https://www.vaultproject.io/) as distributed secret manager (Only for AWS credentials for now). E.g. by using `VAULT_ADDR` and either `VAULT_ROLE_ID` + `VAULT_SECRET_ID` or directly a `VAULT_TOKEN` your credentials will automatically be fetched into your vault.
 
-
 ## Installation
 
-Simply download the `Makefile` and the `terraform.sh` files in your terraform configuration directory.
+### Package install
 
+(for now packages are not published in any repository)
+
+    dpkg -i tf-make_<version>.deb
+
+### Manual install
+
+Simply download the `Makefile` and the `terraform.sh` files in safe place.
+
+    mkdir -p /opt/terraform
+    cd /opt/terraform
     wget -N https://raw.githubusercontent.com/paulRbr/terraform-makefile/master/{Makefile,terraform.sh}
+
+Then you will need to add the `tf-make` binary (it's a simple bash script) in your $PATH. WARNING: you'll need to change the Makefile path in the `tf-make` file.
 
 ## Convention
 

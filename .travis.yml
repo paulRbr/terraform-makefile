@@ -2,13 +2,21 @@
 # Use the new container infrastructure
 sudo: required
 
-install:
-  # Install terraform
-  - sudo make install
-  # Check ansible version
-  - terraform --version
-
-script:
-  # Basic run
-  - make
-  - ./test.sh
+jobs:
+  include:
+    - stage: test
+      install:
+        # Install terraform
+        - sudo make install
+        # Check ansible version
+        - terraform --version
+      script:
+        # Basic run
+        - make
+        - ./test.sh
+    - stage: package
+      install:
+        - gem install fpm
+      script:
+        # Debian package build
+        - fpm -s dir -x providers -x .git -t deb -n tf-make -v $(cat VERSION) tf-make=/usr/local/bin/ Makefile=/opt/terraform/ terraform.sh=/opt/terraform/
