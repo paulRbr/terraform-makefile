@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.11.1
+FROM hashicorp/terraform:0.11.2
 
 RUN \
 apk add --no-cache make bash ca-certificates jq curl ;\
