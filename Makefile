@@ -114,7 +114,7 @@ state: ## Inspect or change the remote state of your resources
 plan: dry-run
 .PHONY: dry-run
 dry-run: install ## Dry run resources changes
-	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS)
+	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS) | landscape
 
 .PHONY: apply
 apply: run
