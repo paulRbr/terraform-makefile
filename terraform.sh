@@ -46,7 +46,7 @@ fi
 if [ -n "${VAULT_ADDR}" ]; then
     if [ -z "${VAULT_TOKEN}" ]; then
         if [ -n "${VAULT_ROLE_ID}" ] && [ -n "${VAULT_SECRET_ID}" ]; then
-            export VAULT_TOKEN=$(curl -s -X POST -d "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
+            declare -x "VAULT_TOKEN"=$(curl -s -X POST -d "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
             if [ -z "${VAULT_TOKEN}" ] || [ "${VAULT_TOKEN}" == "null" ]; then
                 echo "Error fetching 'VAULT_TOKEN' from 'VAULT_ROLE_ID' and 'VAULT_SECRET_ID'"
                 exit
@@ -70,9 +70,9 @@ if [ -n "${VAULT_ADDR}" ]; then
 
             # We use STS by default but if we need to perform IAM actions we can't use it
             if [ "${vault_aws_iam}" == "true" ]; then
-                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
+                creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
             else
-                creds=$(curl -s -X POST -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
+                creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
                 declare "${token}"=$(echo ${creds} | jq -r .security_token)
             fi
 
