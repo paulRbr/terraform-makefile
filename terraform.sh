@@ -47,7 +47,7 @@ if [ -n "${VAULT_ADDR}" ]; then
     if [ -z "${VAULT_TOKEN}" ]; then
         if [ -n "${VAULT_ROLE_ID}" ] && [ -n "${VAULT_SECRET_ID}" ]; then
             export VAULT_TOKEN=$(curl -s -X POST -d "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
-            if [ "${VAULT_TOKEN}" == "null" ]; then
+            if [ -z "${VAULT_TOKEN}" ] || [ "${VAULT_TOKEN}" == "null" ]; then
                 echo "Error fetching 'VAULT_TOKEN' from 'VAULT_ROLE_ID' and 'VAULT_SECRET_ID'"
                 exit
             fi
@@ -76,7 +76,7 @@ if [ -n "${VAULT_ADDR}" ]; then
                 declare "${token}"=$(echo ${creds} | jq -r .security_token)
             fi
 
-            if [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
+            if [ -z "$(echo ${creds})" ] || [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
                 echo "Unable to fetch AWS credentials from Vault"
                 exit
             fi
@@ -84,7 +84,7 @@ if [ -n "${VAULT_ADDR}" ]; then
             declare "${key}"=$(echo ${creds} | jq -r .access_key)
             declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
 
-            echo "Fetched AWS credentials from Vault"
+            echo "Fetched AWS credentials from Vault."
             ;;
     esac
 fi
