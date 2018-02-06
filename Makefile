@@ -44,17 +44,19 @@ endif
 ##
 # INTERNAL VARIABLES
 ##
-ifeq ("$(shell which terraform)", "")
-  install ?= "true"
-endif
 # Read all subsquent tasks as arguments of the first task
 RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(args) $(RUN_ARGS):;@:)
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+landscape   := $(shell command -v landscape 2> /dev/null)
+terraform   := $(shell command -v terraform 2> /dev/null)
 
 ##
 # MAKEFILE ARGUMENTS
 ##
+ifndef terraform
+  install ?= "true"
+endif
 ifeq ("$(upgrade)", "true")
   install ?= "true"
 endif
@@ -114,7 +116,11 @@ state: ## Inspect or change the remote state of your resources
 plan: dry-run
 .PHONY: dry-run
 dry-run: install ## Dry run resources changes
+ifndef landscape
+	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS)
+else
 	@bash $(dir $(mkfile_path))/terraform.sh plan $(args) $(RUN_ARGS) | landscape
+endif
 
 .PHONY: apply
 apply: run
