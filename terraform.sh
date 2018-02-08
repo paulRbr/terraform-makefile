@@ -23,6 +23,8 @@ fi
 
 vault_path=${vault_path:-""}
 vault_ttl=${vault_ttl:-"15m"}
+
+vault_aws=${vault_aws:-"true"}
 vault_aws_role=${vault_aws_role:-"admin"}
 vault_aws_iam=${vault_aws_iam:-"false"}
 
@@ -57,36 +59,34 @@ if [ -n "${VAULT_ADDR}" ]; then
         fi
     fi
 
-    case $provider in
-        aws)
-            if [ -z "${vault_path}" ]; then
-              vault_path="aws"
-            fi
+    if [ "${vault_aws}" == "true" ]; then
+        if [ -z "${vault_path}" ]; then
+          vault_path="aws"
+        fi
 
-            if [ -z "${vault_aws_role}" ]; then
-              echo "'vault_aws_role' variable must be set"
-              exit
-            fi
+        if [ -z "${vault_aws_role}" ]; then
+          echo "'vault_aws_role' variable must be set"
+          exit
+        fi
 
-            # We use STS by default but if we need to perform IAM actions we can't use it
-            if [ "${vault_aws_iam}" == "true" ]; then
-                creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
-            else
-                creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
-                declare "${token}"=$(echo ${creds} | jq -r .security_token)
-            fi
+        # We use STS by default but if we need to perform IAM actions we can't use it
+        if [ "${vault_aws_iam}" == "true" ]; then
+            creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
+        else
+            creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
+            declare "${token}"=$(echo ${creds} | jq -r .security_token)
+        fi
 
-            if [ -z "$(echo ${creds})" ] || [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
-                echo "Unable to fetch AWS credentials from Vault"
-                exit
-            fi
+        if [ -z "$(echo ${creds})" ] || [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
+            echo "Unable to fetch AWS credentials from Vault"
+            exit
+        fi
 
-            declare "${key}"=$(echo ${creds} | jq -r .access_key)
-            declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
+        declare "${key}"=$(echo ${creds} | jq -r .access_key)
+        declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
 
-            echo "Fetched AWS credentials from Vault."
-            ;;
-    esac
+        echo "Fetched AWS credentials from Vault."
+    fi
 fi
 
 case $provider in
