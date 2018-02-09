@@ -74,7 +74,7 @@ if [ -n "${VAULT_ADDR}" ]; then
             creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/creds/${vault_aws_role}" | jq .data)
         else
             creds=$(curl -s -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" -d "{\"ttl\":\"${vault_ttl}\"}" "${VAULT_ADDR}/v1/${vault_path}/sts/${vault_aws_role}" | jq .data)
-            declare "${token}"=$(echo ${creds} | jq -r .security_token)
+            declare -x "AWS_SESSION_TOKEN"=$(echo ${creds} | jq -r .security_token)
         fi
 
         if [ -z "$(echo ${creds})" ] || [ "$(echo ${creds} | jq -r .access_key)" == "null" ]; then
@@ -82,8 +82,8 @@ if [ -n "${VAULT_ADDR}" ]; then
             exit
         fi
 
-        declare "${key}"=$(echo ${creds} | jq -r .access_key)
-        declare "${secret}"=$(echo ${creds} | jq -r .secret_key)
+        declare -x "AWS_ACCESS_KEY_ID"=$(echo ${creds} | jq -r .access_key)
+        declare -x "AWS_SECRET_ACCESS_KEY"=$(echo ${creds} | jq -r .secret_key)
 
         echo "Fetched AWS credentials from Vault."
     fi
