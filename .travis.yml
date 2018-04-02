@@ -19,7 +19,7 @@ jobs:
         api_key:
           secure: BWdVu3bKY96aP0q0edWeMH9VDij4MLhOz5y45BMeW+zutUHOWpNQ9Xghrnj4hrupM/GTE4z6vi62IZqnhFdeTgjzi1A1D1l/7O2w38Mzt5AXQwb5PH/SoHh//xXimwiyvaZk4KepyRsb0P3j8ysIxeh1Ypj5rBKg3TqTF9odO1AP9mmvI/zvixg6ibbg4jaF27tlJ3hRiVzL/gSmw9TztAUDEfEOG9ZNfYl4uBRmxXNx9oPGWpEWS6i/awi8MoPKDt0cf784Sryd8V+OGnkp1S5iKHwpjGw0iUdUHRIOTMMEUF0sNwqulg/BP26HfHP2BMAbxm9AD7LZ8KrPLCCyurm0/WWGUOaW++aNsf+OXouh7hecW2/riFKUaw4cql1eiyhK0rS1yGp3eZtA6J/JCkXce4fI6t7U/yn5fzpdmteMhOwIpn/N793CQmuMYXxQd01I6psddwdYsK+2DIGr2AYFZMG+FuAzwD8KBjD4BBylAy+VVeK+dCSSr4suEVN6E3bXMpUY1udJelX4tdXmifUxBw74+DHmEXmHdCIJtyOj2Hk0tJf/zWeZrh6K7x+wYqghSRBKqc/GVlQhxji/kMBb1SVg+Le4KWvMvGK+tjabssnUJBfvwziM0t8oIeCmQ3bvYv1tZevySbLcuCT6NM2ccDtzce02UQmE81gG2ao=
         file_glob: true
-        file: tf-make_*_amd.deb
+        file: tf-make_*_amd64.deb
         skip_cleanup: true
         on:
           repo: paulRbr/terraform-makefile
