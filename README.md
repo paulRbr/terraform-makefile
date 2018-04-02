@@ -19,8 +19,9 @@ This repository provides a Makefile to give you a simple interface for [Terrafor
 
 ### Package install
 
-(for now packages are not published in any repository)
+(for now packages are only published in [Github releases](https://github.com/paulRbr/terraform-makefile/releases))
 
+    wget https://github.com/paulRbr/terraform-makefile/releases/download/<version>/tf-make_<version>_amd64.deb
     dpkg -i tf-make_<version>.deb
 
 ### Manual install
