@@ -66,7 +66,7 @@ List of commands made available
 
 ~~~bash
 > make
-Terraform-makefile v0.11.5
+Terraform-makefile v0.11.6
 
 console                        Console infra resources
 destroy                        Destroy resources
