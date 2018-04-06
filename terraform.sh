@@ -38,11 +38,13 @@ secret="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_SECRET"
 token="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_TOKEN"
 
 if (which pass >/dev/null 2>&1); then
-    pass_key="$(pass "terraform/${provider}/${env}/access_key")"
-    pass_secret="$(pass "terraform/${provider}/${env}/secret")"
+    pass_key="$(pass "terraform/${provider}/${env}/access_key" || echo '')"
+    pass_secret="$(pass "terraform/${provider}/${env}/secret" || echo '')"
 
-    declare "${key}"="${pass_key}"
-    declare "${secret}"="${pass_secret}"
+    if [ -n "${pass_key}" ] && [ -n "${pass_secret}" ]; then
+        declare "${key}"="${pass_key}"
+        declare "${secret}"="${pass_secret}"
+    fi
 fi
 
 if [ -n "${VAULT_ADDR}" ]; then
