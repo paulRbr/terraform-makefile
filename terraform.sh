@@ -134,5 +134,9 @@ case $provider in
         ;;
 esac
 
+if [ -n "$debug" ]; then
+    declare -x "TF_LOG=$debug"
+fi
+
 cd "providers/${provider}/${env}"
 terraform "$@"

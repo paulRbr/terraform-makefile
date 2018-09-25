@@ -50,6 +50,7 @@ $(eval $(args) $(RUN_ARGS):;@:)
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 landscape   := $(shell command -v landscape 2> /dev/null)
 terraform   := $(shell command -v terraform 2> /dev/null)
+debug       :=
 
 ##
 # MAKEFILE ARGUMENTS
