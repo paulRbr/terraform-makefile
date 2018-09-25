@@ -40,10 +40,14 @@ token="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_TOKEN"
 if (which pass >/dev/null 2>&1); then
     pass_key="$(pass "terraform/${provider}/${env}/access_key" || echo '')"
     pass_secret="$(pass "terraform/${provider}/${env}/secret" || echo '')"
+    pass_token="$(pass "terraform/${provider}/${env}/token" || echo '')"
 
     if [ -n "${pass_key}" ] && [ -n "${pass_secret}" ]; then
         declare "${key}"="${pass_key}"
         declare "${secret}"="${pass_secret}"
+    fi
+    if [ -n "${pass_token}" ]; then
+        declare "${token}"="${pass_token}"
     fi
 fi
 
@@ -130,6 +134,11 @@ case $provider in
             declare -x "OS_PASSWORD=${!secret}"
         elif [ -z "${OS_AUTH_TOKEN}" ]; then
             declare -x "OS_AUTH_TOKEN=${!secret}"
+        fi
+        if [ -z "${OVH_APPLICATION_KEY}" ]; then
+            declare -x "OVH_APPLICATION_KEY=${!key}"
+            declare -x "OVH_APPLICATION_SECRET=${!secret}"
+            declare -x "OVH_CONSUMER_KEY=${!token}"
         fi
         ;;
 esac
