@@ -2,5 +2,5 @@
 .travis.yml
 LICENSE.md
 README.md
-test.sh
+scripts/test.sh
 VERSION

@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -eo pipefail
 
 echo "Checking difference between README.md and make help output..."
 readme_help="$(awk '/> make/{f=1;next} /~~~/{f=0} f' README.md)"
