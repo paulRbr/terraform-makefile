@@ -7,7 +7,8 @@ jobs:
         - terraform --version
       script:
         - make
-        - "./test.sh"
+        - "./scripts/bump.sh $(cat VERSION)"
+        - "./scripts/test.sh"
     - stage: package:deploy
       install:
         - gem install fpm
