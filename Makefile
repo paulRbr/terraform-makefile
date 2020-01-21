@@ -72,7 +72,7 @@ ifeq ($(install),"true")
 	@unzip -d /usr/bin /usr/bin/terraform.zip && rm /usr/bin/terraform.zip
 endif
 	@terraform --version
-	@bash $(dir $(mkfile_path))/terraform.sh init
+	@bash $(dir $(mkfile_path))/terraform.sh init $(args)
 
 .PHONY: fmt
 fmt:
