@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.12.19
+# v0.12.24
 # ------------------
 #
 # This Makefile is maintained on Github.com.

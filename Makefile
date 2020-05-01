@@ -1,6 +1,6 @@
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.12.19
+# v0.12.24
 # ------------------
 #
 # Terraform makefile is a helper to run terraform commands
@@ -29,7 +29,7 @@
 ##
 # TERRAFORM INSTALL
 ##
-version  ?= "0.12.19"
+version  ?= "0.12.24"
 os       ?= $(shell uname|tr A-Z a-z)
 ifeq ($(shell uname -m),x86_64)
   arch   ?= "amd64"
