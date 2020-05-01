@@ -71,9 +71,10 @@ Terraform-makefile v0.12.24
 console                        Console infra resources
 destroy                        Destroy resources
 dry-run                        Dry run resources changes
+fmt                            Rewrites config to canonical format
 import                         Import infra resources
 install                        Install terraform and dependencies
-lint                           Rewrites config to canonical format
+lint                           Lint the HCL code
 refresh                        Refresh infra resources
 run                            Execute resources changes
 show                           List infra resources
