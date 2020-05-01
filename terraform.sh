@@ -128,6 +128,13 @@ case $provider in
             declare -x "SCW_ACCESS_KEY=${!key}"
             declare -x "SCW_SECRET_KEY=${!secret}"
         fi
+        # This is a hack to be able to use S3 tf backend on a scaleway object storage
+        #   and because terraform doesn't allow interpolation in backend config:
+        #   https://github.com/hashicorp/terraform/issues/13022
+        if [ -z "${AWS_ACCESS_KEY_ID}" ]; then
+            declare -x "AWS_ACCESS_KEY_ID=${!key}"
+            declare -x "AWS_SECRET_ACCESS_KEY=${!secret}"
+        fi
         ;;
     ovh)
         if [ -z "${OS_PASSWORD}" ]; then
