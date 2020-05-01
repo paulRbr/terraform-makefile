@@ -75,11 +75,12 @@ endif
 	@bash $(dir $(mkfile_path))/terraform.sh init $(args)
 
 .PHONY: fmt
-fmt:
-	@terraform fmt $(args) $(RUN_ARGS)
+fmt: ## Rewrites config to canonical format
+	@bash $(dir $(mkfile_path))/terraform.sh fmt $(args)
+
 .PHONY: lint
-lint: ## Rewrites config to canonical format
-	@terraform fmt -diff=true -check $(args) $(RUN_ARGS)
+lint: ## Lint the HCL code
+	@bash $(dir $(mkfile_path))/terraform.sh fmt -diff=true -check $(args) $(RUN_ARGS)
 
 .PHONY: validate
 validate: ## Basic syntax check
