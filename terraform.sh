@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ------------------
 # TERRAFORM-MAKEFILE
 # v0.12.19
@@ -8,7 +9,7 @@
 # https://github.com/paulRbr/terraform-makefile/pull/new/master
 # Thanks! - Paul(rbr)
 #
-#!/usr/bin/env bash
+
 set -e
 
 if [ -z "${provider}" ]; then
@@ -37,7 +38,7 @@ key="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_KEY"
 secret="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_SECRET"
 token="$(valid_identifier "${provider}")_$(valid_identifier "${env}")_TOKEN"
 
-if (which pass >/dev/null 2>&1); then
+if command -v pass >/dev/null 2>&1; then
     pass_key="$(pass "terraform/${provider}/${env}/access_key" || echo '')"
     pass_secret="$(pass "terraform/${provider}/${env}/secret" || echo '')"
     pass_token="$(pass "terraform/${provider}/${env}/token" || echo '')"
@@ -123,9 +124,9 @@ case $provider in
         fi
         ;;
     scaleway)
-        if [ -z "${SCALEWAY_ORGANIZATION}" ]; then
-            declare -x "SCALEWAY_ORGANIZATION=${!key}"
-            declare -x "SCALEWAY_TOKEN=${!secret}"
+        if [ -z "${SCW_ACCESS_KEY}" ]; then
+            declare -x "SCW_ACCESS_KEY=${!key}"
+            declare -x "SCW_SECRET_KEY=${!secret}"
         fi
         ;;
     ovh)
