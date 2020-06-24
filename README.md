@@ -10,7 +10,7 @@ This repository provides a Makefile to give you a simple interface for [Terrafor
 - Don't Repeat Yourself while typing terraform commands
 - Easier adoption for people that are not used to Terraform
 - Document common usage
-- Unique entrypoint script for credentials management (only for AWS, Azure, DigitalOcean, Google and Scaleway for now)
+- Unique entrypoint script for credentials management (only for AWS, Azure, DigitalOcean, Google, Hetzner and Scaleway for now)
   - either passing ENV variables. E.g. `<PROVIDER>_<ENV>_SECRET` will be mapped to `DIGITALOCEAN_TOKEN` if `provider=do` is provided as variable
   - either using [`pass`](https://www.passwordstore.org/) as local secret manager. E.g. password `terraform/<provider>/<env>/secret` will be mapped to `DIGITALOCEAN_TOKEN` if `provider=do` is provided as variable
   - either using [`vault`](https://www.vaultproject.io/) as distributed secret manager (Only for AWS credentials for now). E.g. by using `VAULT_ADDR` and either `VAULT_ROLE_ID` + `VAULT_SECRET_ID` or directly a `VAULT_TOKEN` your credentials will automatically be fetched into your vault.
@@ -53,6 +53,9 @@ providers/
 │   │   └── empty.tf
 │   └── test
 │       └── empty.tf
+├── hetzner
+│   └── prod
+│       └── empty.tf
 └── scaleway
     └── prod
         └── empty.tf
@@ -89,8 +92,8 @@ workspace                      Workspace infra resources
 Details of the variables that can be passed to commands:
 
 
-| Name      | Default | Values | Description | Example |
-| --------- | ------- | ------ | ----------- | ------- |
-| `provider`| -       | `aws`<br/>`azure`<br/>`do`<br/>`google`<br/>`scaleway` | Name of the cloud provider to target | With your terraform file in `provider/aws/production/production.tf` you will be able to `make dry-run provider=aws env=production`  |
-| `env`     | -       | `String` | Name of the environment you want to use | With a terraform file in `provider/google/production/production.tf` you will be able to `make dry-run provider=google env=production` |
-| `args`    | -       | `String` | Add terraform understandable arguments | `make dry-run args='-no-color'` |
+| Name       | Default | Values                                                               | Description                             | Example                                                                                                                               |
+| ---------  | ------- | ------                                                               | -----------                             | -------                                                                                                                               |
+| `provider` | -       | `aws`<br/>`azure`<br/>`do`<br/>`google`<br/>`hetzner`<br/>`scaleway` | Name of the cloud provider to target    | With your terraform file in `provider/aws/production/production.tf` you will be able to `make dry-run provider=aws env=production`    |
+| `env`      | -       | `String`                                                             | Name of the environment you want to use | With a terraform file in `provider/google/production/production.tf` you will be able to `make dry-run provider=google env=production` |
+| `args`     | -       | `String`                                                             | Add terraform understandable arguments  | `make dry-run args='-no-color'`                                                                                                       |
