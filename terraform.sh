@@ -123,10 +123,16 @@ case $provider in
             declare -x "GOOGLE_CREDENTIALS=${!secret}"
         fi
         ;;
+    hetzner)
+        if [ -z "${HCLOUD_TOKEN}" ]; then
+            declare -x "HCLOUD_TOKEN=${!secret}"
+        fi
+        ;;
     scaleway)
         if [ -z "${SCW_ACCESS_KEY}" ]; then
             declare -x "SCW_ACCESS_KEY=${!key}"
             declare -x "SCW_SECRET_KEY=${!secret}"
+            declare -x "SCW_DEFAULT_ORGANIZATION_ID=${!token}"
         fi
         # This is a hack to be able to use S3 tf backend on a scaleway object storage
         #   and because terraform doesn't allow interpolation in backend config:
