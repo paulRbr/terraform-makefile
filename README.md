@@ -36,32 +36,39 @@ Then you will need to add the `tf-make` binary (it's a simple bash script) in yo
 
 ## Convention
 
-This makefile assumes your terraform configuration files are stored as such:
+This makefile assumes your terraform configuration files are stored in a specific directory structure:
 
+I.e. `providers/<provider>/<env>/*.tf`
+
+E.g. example for all supported providers:
 ```
 providers/
 ├── aws
 │   ├── prod
-│   │   └── empty.tf
+│   │   └── config.tf
 │   └── test
-│       └── empty.tf
+│       └── config.tf
 ├── do
 │   └── prod
-│       └── empty.tf
+│       └── config.tf
 ├── google
 │   ├── prod
-│   │   └── empty.tf
+│   │   └── config.tf
 │   └── test
-│       └── empty.tf
+│       └── config.tf
+├── hetzner,scaleway
+│   └── test
+│       └── config.tf
 ├── hetzner
 │   └── prod
-│       └── empty.tf
+│       └── config.tf
 └── scaleway
     └── prod
-        └── empty.tf
+        └── config.tf
 ```
 
-I.e. `providers/<provider>/<env>/*.tf`
+
+_Note: the `provider` name can be a combination of multiple providers when you are in a multi-cloud environment. E.g. `providers/hetzner,scaleway/prod/config.tf`._
 
 ## Commands
 
@@ -92,8 +99,8 @@ workspace                      Workspace infra resources
 Details of the variables that can be passed to commands:
 
 
-| Name       | Default | Values                                                               | Description                             | Example                                                                                                                               |
-| ---------  | ------- | ------                                                               | -----------                             | -------                                                                                                                               |
-| `provider` | -       | `aws`<br/>`azure`<br/>`do`<br/>`google`<br/>`hetzner`<br/>`scaleway` | Name of the cloud provider to target    | With your terraform file in `provider/aws/production/production.tf` you will be able to `make dry-run provider=aws env=production`    |
-| `env`      | -       | `String`                                                             | Name of the environment you want to use | With a terraform file in `provider/google/production/production.tf` you will be able to `make dry-run provider=google env=production` |
-| `args`     | -       | `String`                                                             | Add terraform understandable arguments  | `make dry-run args='-no-color'`                                                                                                       |
+| Name       | Default | Values                                                                                                                       | Description                             | Example                                                                                                                                                                                                                                                                                                                                        |
+| ---------  | ------- | ------                                                                                                                       | -----------                             | -------                                                                                                                                                                                                                                                                                                                                        |
+| `provider` | -       | `aws`<br/>`azure`<br/>`do`<br/>`google`<br/>`hetzner`<br/>`scaleway`<br/>or any combination of those separated by commas `,` | Name of the cloud provider(s) to target | With your terraform file in `provider/aws/production/production.tf` you will be able to `make dry-run provider=aws env=production`<br/>With a terraform file in `provider/hetzner,scaleway/production/config.tf` you will be able to `make dry-run provider=hetzner,scaleway env=production` and have credentials for both providers available |
+| `env`      | -       | `String`                                                                                                                     | Name of the environment you want to use | With a terraform file in `provider/google/production/production.tf` you will be able to `make dry-run provider=google env=production`                                                                                                                                                                                                          |
+| `args`     | -       | `String`                                                                                                                     | Add terraform understandable arguments  | `make dry-run args='-no-color'`                                                                                                                                                                                                                                                                                                                |
