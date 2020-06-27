@@ -128,7 +128,7 @@ while IFS=',' read -ra providers; do
                 ;;
             hetzner)
                 if [ -z "${HCLOUD_TOKEN}" ]; then
-                    declare -x "HCLOUD_TOKEN=${!secret}"
+                    declare -x "HCLOUD_TOKEN=${!token}"
                 fi
                 ;;
             scaleway)
