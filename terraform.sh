@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ------------------
 # TERRAFORM-MAKEFILE
-# v0.12.27
+# v0.12.29
 # ------------------
 #
 # This Makefile is maintained on Github.com.
@@ -158,6 +158,11 @@ while IFS=',' read -ra providers; do
                     declare -x "OVH_CONSUMER_KEY=${!token}"
                 fi
                 ;;
+            gandi)
+                if [ -z "${GANDI_SHARING_ID}" ]; then
+                    declare -x "GANDI_SHARING_ID=${!key}"
+                    declare -x "GANDI_KEY=${!secret}"
+                fi
         esac
 
     done
