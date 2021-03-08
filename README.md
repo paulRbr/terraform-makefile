@@ -85,6 +85,7 @@ fmt                            Rewrites config to canonical format
 import                         Import infra resources
 install                        Install terraform and dependencies
 lint                           Lint the HCL code
+raw                            Raw command sent to terraform
 refresh                        Refresh infra resources
 run                            Execute resources changes
 show                           List infra resources
