@@ -134,6 +134,10 @@ run: ## Execute resources changes
 destroy: ## Destroy resources
 	@bash $(dir $(mkfile_path))/terraform.sh destroy $(args) $(RUN_ARGS)
 
+.PHONY: raw
+raw: ## Raw command sent to terraform
+	@bash $(dir $(mkfile_path))/terraform.sh $(RUN_ARGS) $(args)
+
 help:
 	@printf "\033[32mTerraform-makefile v$(version)\033[0m\n\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
