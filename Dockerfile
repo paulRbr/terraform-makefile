@@ -11,7 +11,6 @@ apk del --purge build
 WORKDIR /opt/terraform
 ADD . .
 
-VOLUME [ /opt/terraform/providers ]
-VOLUME [ /opt/terraform/modules ]
+VOLUME [ "/opt/terraform/providers", "/opt/terraform/modules" ]
 
 ENTRYPOINT [ "/usr/bin/tf-make" ]
