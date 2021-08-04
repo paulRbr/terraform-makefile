@@ -106,6 +106,10 @@ import: ## Import infra resources
 taint: ## Taint infra resources
 	bash $(dir $(mkfile_path))terraform.sh taint -module=$(module) $(args) $(RUN_ARGS)
 
+.PHONY: untaint
+untaint: ## Untaint infra resources
+	bash $(dir $(mkfile_path))terraform.sh untaint -module=$(module) $(args) $(RUN_ARGS)
+
 .PHONY: workspace
 workspace: ## Workspace infra resources
 	bash $(dir $(mkfile_path))terraform.sh workspace $(args) $(RUN_ARGS)

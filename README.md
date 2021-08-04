@@ -91,6 +91,7 @@ run                            Execute resources changes
 show                           List infra resources
 state                          Inspect or change the remote state of your resources
 taint                          Taint infra resources
+untaint                        Untaint infra resources
 validate                       Basic syntax check
 workspace                      Workspace infra resources
 ~~~
